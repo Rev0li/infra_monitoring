@@ -9,7 +9,7 @@ updated: 2026-09-16
 # TICKET-15 — Documentation finale + préparation démo
 
 ## 🎯 Objectif
-Mettre à jour l'ensemble des docs (`docs/`) pour refléter ce qui a été réellement construit, et préparer le déroulé de la démonstration technique.
+Mettre à jour l'ensemble des docs (`docs/`) pour refléter ce qui a été réellement construit, et préparer **deux livrables distincts** : le déroulé de la démonstration technique (dev) et un support de présentation à la hiérarchie (non technique — le problème résolu, ce qui a été construit, la valeur). Voir `docs/03-scope.md` et `CLAUDE.md`.
 
 ## ✅ Definition of Done
 - [ ] Code implémenté

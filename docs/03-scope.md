@@ -9,7 +9,7 @@ Le rempart anti scope-creep. Si une demande tombe dans les non-goals, on dit non
 - Déploiement d'une appli bidon (Spring Boot + Angular/Tailwind) de bout en bout à travers les 4 environnements.
 - Logs centralisés (Loki/Promtail) et métriques (Prometheus) visibles dans Grafana.
 - Lien basique Jira ↔ Bitbucket ↔ Jenkins (statut de ticket/build).
-- Documentation complète de chaque brique et décision (`docs/`).
+- Documentation complète de chaque brique et décision (`docs/`) — exigence **primordiale**, à deux publics : documentation dev (`docs/`) et support de présentation à la hiérarchie (non technique, distinct de la doc dev).
 
 ## Non-goals (hors scope, assumé)
 - Migration complète d'une vraie appli en production réelle — **pour l'instant**. Une vraie appli R&D pourra être branchée une fois le pipeline validé sur l'appli bidon, si le temps le permet.
