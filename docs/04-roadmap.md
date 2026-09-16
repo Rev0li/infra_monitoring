@@ -16,7 +16,7 @@ a un fichier dans `docs/tickets/<ID>.md` (géré par le skill ticket-handoff).
 ## Jour 2 — Appli pilote + pipeline CI
 | Ticket | Titre | Dépend de | Statut |
 |---|---|---|---|
-| TICKET-04 | Créer le repo Bitbucket de l'appli bidon (Spring Boot + Angular/Tailwind) avec Dockerfiles | — | todo |
+| TICKET-04 | Créer le repo Bitbucket de l'appli bidon (Spring Boot + Angular/Tailwind) avec Dockerfiles | — | tested (⏸ bloqué sur l'accès Bitbucket) |
 | TICKET-05 | Écrire le Jenkinsfile déclaratif (build, test, docker build, push) déclenché par webhook Bitbucket | TICKET-02, TICKET-04 | todo |
 | TICKET-06 | Déployer automatiquement en namespace `dev` à chaque push | TICKET-03, TICKET-05 | todo |
 
