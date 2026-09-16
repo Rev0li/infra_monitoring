@@ -32,6 +32,7 @@ Le rempart anti scope-creep. Si une demande tombe dans les non-goals, on dit non
 - [x] Un registre d'images Docker existe-t-il déjà côté central, ou faut-il en héberger un dans k3s ? → **Aucun registre central identifié, on héberge un `registry:2` dans k3s** (décidé le 2026-09-16, voir TICKET-02 et ADR-004).
 - [ ] Base de données de l'appli pilote (moteur, ou aucune pour la v0 bidon ?).
 - [ ] Jenkins central : un agent peut-il builder/déployer depuis/vers la VM, ou faut-il enregistrer la VM comme agent Jenkins ?
+- [ ] **Bloquant TICKET-04 (2026-09-16) :** le Bitbucket d'entreprise n'est accessible que depuis le poste de bureau — création du repo de l'appli pilote reportée au prochain passage au bureau. Le code (backend/frontend/Dockerfiles) peut être préparé en local en attendant.
 - [ ] Quelles contraintes de sécurité/conformité sont déjà connues pour le secteur d'activité, même non formalisées ?
 - [ ] L'accès `sudo` sur cette VM nécessite un mot de passe (pas de sudo sans mot de passe) — à confirmer que l'utilisateur dispose bien de ce mot de passe pour les installations (k3s, Docker, etc.).
 

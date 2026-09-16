@@ -23,10 +23,10 @@ Créer le repo Bitbucket de l'appli bidon représentative (Spring Boot Java 21 c
 ---
 
 ## 🔨 Code — <date>
-**Fait :**
-**Décisions (& pourquoi) :**
-**Fichiers :**
-**Reste / questions pour le test :**
+**Fait :** en attente.
+**Décisions (& pourquoi) :** repo séparé de `infra_monitoring` (mono-repo `backend/` + `frontend/`), sur le Bitbucket d'entreprise de l'utilisateur — pas d'accès direct depuis cette session, l'utilisateur doit créer le repo et fournir l'URL.
+**Fichiers :** à venir, dans un dossier local séparé (proposé : `/home/rev0li/work/appli-pilote`).
+**Reste / questions pour le test :** **⏸ Bloqué le 2026-09-16** — l'utilisateur crée le repo Bitbucket depuis son poste de bureau (accès entreprise, pas disponible en dehors du bureau) et donnera l'URL plus tard. En attendant, le code applicatif (Spring Boot + Angular + Dockerfiles) peut être préparé localement sans dépendre du repo, pour être poussé dès que l'URL est fournie.
 
 ## 🧪 Test — <date>
 **Couvert :**
