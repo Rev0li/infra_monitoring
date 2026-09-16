@@ -25,6 +25,7 @@ echo "Registre ciblé : ${REGISTRY}"
 echo
 echo "--- Droits administrateur ---"
 echo "Écriture de /etc/rancher/k3s/registries.yaml + redémarrage du service k3s : besoin de sudo."
+sudo -k   # oublie tout cache sudo précédent : on veut toujours être demandé explicitement ici
 if ! sudo -v; then
   echo "Impossible d'obtenir les droits sudo — annulé." >&2
   exit 1

@@ -30,6 +30,7 @@ if command -v k3s >/dev/null 2>&1; then
   fi
   echo "Le binaire est là mais le service k3s n'est pas actif (installation précédente interrompue ?)."
   echo "Tentative de démarrage du service existant plutôt qu'une réinstallation complète."
+  sudo -k   # oublie tout cache sudo précédent : on veut toujours être demandé explicitement ici
   sudo systemctl start k3s
   sleep 3
   if systemctl is-active --quiet k3s; then
@@ -48,6 +49,7 @@ if [[ "${EUID}" -ne 0 ]]; then
   echo "L'installateur va demander ton mot de passe plusieurs fois pendant l'install —"
   echo "c'est normal, on le met en cache une bonne fois pour toutes ici :"
   echo
+  sudo -k   # oublie tout cache sudo précédent : on veut toujours être demandé explicitement ici
   if ! sudo -v; then
     echo "Impossible d'obtenir les droits sudo — installation annulée." >&2
     exit 1

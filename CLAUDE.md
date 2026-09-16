@@ -29,4 +29,6 @@ Ne jamais attendre la fin d'un ticket pour documenter — mettre à jour la doc 
 ## Conventions
 - Une branche par ticket (`feat/ticket-XX`, voir le frontmatter du fichier ticket).
 - Commits explicites (`docs:`, `feat:`, `fix:` + résumé court).
+- Scripts qui ont besoin de sudo (`scripts/*.sh`) : toujours `sudo -k` juste avant `sudo -v`/tout premier `sudo`, pour forcer une demande de mot de passe explicite à chaque exécution plutôt que de dépendre silencieusement du cache sudo (demande explicite de l'utilisateur, voir TICKET-02).
+- Registre d'images interne (`192.168.1.50:30500`) : HTTP simple, sans TLS/auth — k3s (containerd) ET le daemon Docker doivent chacun être configurés séparément pour l'accepter (`registries.yaml` pour l'un, `daemon.json` pour l'autre). Voir `scripts/configure-k3s-registry.sh`.
 - Avant tout `git push --force` ou réécriture d'historique : confirmer explicitement avec l'utilisateur, même si une règle générale l'autorise déjà — le risque (repo public) le justifie.
