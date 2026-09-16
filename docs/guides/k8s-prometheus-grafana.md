@@ -63,7 +63,13 @@ Le problème de départ de ce POC est un déploiement actuel avec **zéro log se
 ## 4. Atelier Pratique : Mini-Projet Step-by-Step
 
 ### Étape 1 : Le cluster (déjà couvert par TICKET-01)
-Le cluster k3s single-node est installé sur la VM (voir TICKET-01). Toutes les commandes ci-dessous s'exécutent avec `kubectl` configuré sur ce cluster (`export KUBECONFIG=/etc/rancher/k3s/k3s.yaml` en général sur k3s).
+Le cluster k3s single-node s'installe via `scripts/install-k3s.sh` (script interactif — demande le mot de passe sudo une fois, voir TICKET-01 pour le détail). Il installe avec `K3S_KUBECONFIG_MODE="644"`, ce qui rend `/etc/rancher/k3s/k3s.yaml` lisible sans sudo ensuite.
+
+Toutes les commandes ci-dessous s'exécutent avec `kubectl` configuré sur ce cluster :
+```bash
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+kubectl get nodes   # ou : k3s kubectl get nodes, sans variable d'env
+```
 
 ### Étape 2 : Déployer Prometheus + Grafana via Helm
 ```bash

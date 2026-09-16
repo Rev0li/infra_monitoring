@@ -1,7 +1,7 @@
 ---
 ticket: TICKET-01
 title: Prérequis VM + installation k3s single-node
-status: todo          # todo → coded → tested → refactored → validated
+status: coded          # todo → coded → tested → refactored → validated
 branch: feat/ticket-01
 updated: 2026-09-16
 ---
