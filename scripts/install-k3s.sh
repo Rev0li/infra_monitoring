@@ -24,8 +24,21 @@ echo
 
 if command -v k3s >/dev/null 2>&1; then
   echo "k3s est déjà installé : $(k3s --version | head -1)"
-  echo "Rien à faire. (Supprime k3s avec /usr/local/bin/k3s-uninstall.sh si tu veux réinstaller.)"
-  exit 0
+  if systemctl is-active --quiet k3s; then
+    echo "Le service k3s tourne déjà. Rien à faire."
+    exit 0
+  fi
+  echo "Le binaire est là mais le service k3s n'est pas actif (installation précédente interrompue ?)."
+  echo "Tentative de démarrage du service existant plutôt qu'une réinstallation complète."
+  sudo systemctl start k3s
+  sleep 3
+  if systemctl is-active --quiet k3s; then
+    echo "Service démarré avec succès."
+    k3s kubectl get nodes -o wide
+    exit 0
+  fi
+  echo "Le service ne démarre toujours pas — voir 'sudo journalctl -u k3s -n 50 --no-pager'." >&2
+  exit 1
 fi
 
 # --- Droits sudo ---

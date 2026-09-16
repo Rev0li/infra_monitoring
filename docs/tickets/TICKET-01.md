@@ -28,11 +28,11 @@ Vérifier que la VM de bureau (OS, distro, specs CPU/RAM/disque, accès sudo) es
 **Fichiers :** `scripts/install-k3s.sh`
 **Reste / questions pour le test :** exécuter le script, vérifier que le nœud passe `Ready`, confirmer l'accès kubectl sans sudo.
 
-## 🧪 Test — <date>
-**Couvert :**
-**NON couvert (assumé) :**
-**Sécurité vérifiée :**
-**Bugs trouvés :**
+## 🧪 Test — 2026-09-16
+**Couvert :** exécution réelle du script par l'utilisateur sur la VM.
+**NON couvert (assumé) :** comportement après reboot de la VM (le service est `enabled`, censé redémarrer automatiquement, à vérifier plus tard).
+**Sécurité vérifiée :** n/a pour ce ticket (pas d'auth/secrets/RBAC).
+**Bugs trouvés :** après exécution du script, le binaire et le service systemd `k3s` étaient bien installés (`enabled`) mais le service n'avait jamais démarré (`inactive`, aucune entrée journalctl) — probablement le script interrompu juste avant l'étape `start`. Le script vérifiait uniquement la présence du binaire `k3s` pour décider "déjà installé, rien à faire", ce qui aurait masqué le problème à une prochaine exécution. **Corrigé :** le script vérifie maintenant `systemctl is-active` et tente un `sudo systemctl start k3s` si le binaire existe mais le service est inactif, au lieu de sortir silencieusement.
 **Audit refactor : X/10** — <arguments>
 
 ## ♻️ Refactor — <date>
