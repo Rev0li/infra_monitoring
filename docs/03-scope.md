@@ -29,7 +29,7 @@ Le rempart anti scope-creep. Si une demande tombe dans les non-goals, on dit non
 ## Questions ouvertes
 - [x] Distro Linux exacte de la VM → **Fedora Linux 44 (Workstation)**, confirmé le 2026-09-16 depuis l'environnement de travail (`/etc/os-release`). À revalider si ce n'est pas la même machine que la VM cible finale du POC.
 - [x] Specs de la VM → **4 vCPU, 16 Go RAM (~10 Go dispo), 254 Go disque (~147 Go dispo)**, constaté le 2026-09-16. Confortable pour k3s + Jenkins agent + Prometheus/Grafana/Loki en usage POC.
-- [ ] Un registre d'images Docker existe-t-il déjà côté central, ou faut-il en héberger un dans k3s ?
+- [x] Un registre d'images Docker existe-t-il déjà côté central, ou faut-il en héberger un dans k3s ? → **Aucun registre central identifié, on héberge un `registry:2` dans k3s** (décidé le 2026-09-16, voir TICKET-02 et ADR-004).
 - [ ] Base de données de l'appli pilote (moteur, ou aucune pour la v0 bidon ?).
 - [ ] Jenkins central : un agent peut-il builder/déployer depuis/vers la VM, ou faut-il enregistrer la VM comme agent Jenkins ?
 - [ ] Quelles contraintes de sécurité/conformité sont déjà connues pour le secteur d'activité, même non formalisées ?

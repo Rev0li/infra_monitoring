@@ -43,8 +43,8 @@ décision écrite ici sans ajouter une nouvelle entrée qui la remplace.
 - **Conséquences :** une brique supplémentaire à installer et documenter, mais directement alignée sur le besoin exprimé par l'utilisateur.
 
 ## ADR-004 — Registre d'images conteneurs
-- **Contexte :** le pipeline Jenkins doit publier des images Docker construites depuis Bitbucket vers k3s ; aucun registre existant n'a été mentionné.
-- **Décision :** déployer un registre local léger (Docker Registry v2) dans le cluster k3s, à défaut d'un registre déjà fourni côté central (à vérifier — voir questions ouvertes).
-- **Pourquoi :** nécessaire au flux CI/CD (build → push → deploy) ; pas d'info confirmée sur un registre déjà existant.
-- **Alternatives écartées :** registre public (Docker Hub) — à éviter pour du code interne, a fortiori dans un secteur sensible.
-- **Conséquences :** point à trancher en tout début de POC (jour 1) — voir `03-scope.md`.
+- **Contexte :** le pipeline Jenkins doit publier des images Docker construites depuis Bitbucket vers k3s ; aucun registre central identifié (confirmé le 2026-09-16).
+- **Décision :** déployer un registre local léger (`registry:2`, Docker Distribution) dans le cluster k3s, namespace `registry`, exposé en `NodePort` fixe (`<IP-VM>:30500`) et accepté en HTTP simple par containerd (`/etc/rancher/k3s/registries.yaml`).
+- **Pourquoi :** nécessaire au flux CI/CD (build → push → deploy) ; aucun registre déjà existant côté central ; NodePort fixe pour que Jenkins et les manifestes K8s puissent le référencer de façon prévisible.
+- **Alternatives écartées :** registre public (Docker Hub) — à éviter pour du code interne, a fortiori dans un contexte à exigences de sécurité élevées ; Harbor — plus complet (scan de vulnérabilités, RBAC) mais trop lourd à opérer pour un POC de 5 jours.
+- **Conséquences :** pas de TLS ni d'authentification sur ce registre — acceptable pour un POC isolé sur une VM, **limite de sécurité explicite** à corriger avant toute vraie mise en production (voir `03-scope.md`). Voir `scripts/configure-k3s-registry.sh` et TICKET-02.
