@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: uat
+  labels:
+    environment: uat
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: uat-quota
+  namespace: uat
+spec:
+  hard:
+    requests.cpu: "500m"
+    requests.memory: 512Mi
+    limits.cpu: "1"
+    limits.memory: 1Gi
+    pods: "10"
