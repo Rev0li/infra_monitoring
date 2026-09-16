@@ -22,11 +22,11 @@ Vérifier que la VM de bureau (OS, distro, specs CPU/RAM/disque, accès sudo) es
 
 ---
 
-## 🔨 Code — <date>
-**Fait :**
-**Décisions (& pourquoi) :**
-**Fichiers :**
-**Reste / questions pour le test :**
+## 🔨 Code — 2026-09-16
+**Fait :** vérification des specs VM (Fedora Linux 44, 4 vCPU, 16 Go RAM, 254 Go disque dont ~147 Go dispo) et script d'installation de k3s.
+**Décisions (& pourquoi) :** `K3S_KUBECONFIG_MODE="644"` à l'install pour rendre le kubeconfig lisible sans sudo ensuite (évite de redemander le mot de passe à chaque commande kubectl). Script interactif car `sudo` sur cette VM demande un mot de passe (pas de sudo-less) — pas exécutable depuis un outil non-interactif, doit être lancé directement dans un terminal.
+**Fichiers :** `scripts/install-k3s.sh`
+**Reste / questions pour le test :** exécuter le script, vérifier que le nœud passe `Ready`, confirmer l'accès kubectl sans sudo.
 
 ## 🧪 Test — <date>
 **Couvert :**
