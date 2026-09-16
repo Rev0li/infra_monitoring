@@ -28,11 +28,11 @@ Installer et valider un registre d'images Docker (Docker Registry v2) accessible
 **Fichiers :** `k8s/registry/registry.yaml`, `scripts/configure-k3s-registry.sh`.
 **Reste / questions pour le test :** exécuter `scripts/configure-k3s-registry.sh` (sudo, modifie `/etc/rancher/k3s/registries.yaml` + redémarre k3s) puis tester un push/pull réel une fois qu'une image de l'appli pilote existe (TICKET-04/05).
 
-## 🧪 Test — <date>
-**Couvert :**
-**NON couvert (assumé) :**
-**Sécurité vérifiée :**
-**Bugs trouvés :**
+## 🧪 Test — 2026-09-16
+**Couvert :** `configure-k3s-registry.sh` exécuté : `registries.yaml` correct, service k3s `active`, nœud `Ready`. Test réel avec Docker : `docker pull alpine`, `docker tag`, `docker push 192.168.1.50:30500/alpine:poc-test`.
+**NON couvert (assumé) :** pull réel par un Pod k3s depuis ce registre (sera couvert par TICKET-06, premier déploiement applicatif).
+**Sécurité vérifiée :** registre en HTTP simple, sans authentification — limite assumée et documentée (ADR-004, `03-scope.md`), acceptable pour un POC isolé sur une VM, à ne pas reproduire tel quel en prod réelle.
+**Bugs trouvés :** `docker push` a échoué (`http: server gave HTTP response to HTTPS client`) — la config `registries.yaml` ne couvre que **containerd/k3s** (ce qui pull les images dans les Pods), pas le **daemon Docker** séparé (ce qui fait `docker build`/`docker push`, utilisé par Jenkins). Il fallait en plus déclarer le registre dans `/etc/docker/daemon.json` (`insecure-registries`) et redémarrer Docker. **Corrigé :** `configure-k3s-registry.sh` fait maintenant les deux configs (containerd ET Docker) en une seule exécution.
 **Audit refactor : X/10** — <arguments>
 
 ## ♻️ Refactor — <date>

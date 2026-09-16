@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-# TICKET-02 : autorise k3s (containerd) à pull depuis le registre interne en
-# HTTP simple (pas de TLS — acceptable pour ce POC, à revoir avant toute
+# TICKET-02 : autorise k3s (containerd) ET le daemon Docker (docker
+# build/push, utilisé par Jenkins) à parler au registre interne en HTTP
+# simple (pas de TLS — acceptable pour ce POC, à revoir avant toute
 # vraie mise en production, voir docs/03-scope.md).
-# À exécuter directement dans un terminal : modifie /etc/rancher/k3s/ (sudo)
-# et redémarre le service k3s.
+# À exécuter directement dans un terminal : modifie /etc/rancher/k3s/ et
+# /etc/docker/ (sudo), redémarre k3s et docker.
 set -euo pipefail
 
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
@@ -58,6 +59,29 @@ if [[ "${ready}" != "true" ]]; then
 fi
 
 k3s kubectl get nodes
+
 echo
-echo "k3s est configuré pour pull en HTTP depuis ${REGISTRY}."
-echo "Les manifestes de déploiement pourront référencer des images en '${REGISTRY}/<image>:<tag>'."
+echo "--- Configuration du daemon Docker (docker build/push, ex: Jenkins) ---"
+if command -v docker >/dev/null 2>&1; then
+  DAEMON_JSON=/etc/docker/daemon.json
+  TMP_JSON="$(mktemp)"
+  if [[ -f "${DAEMON_JSON}" ]]; then
+    sudo jq --arg reg "${REGISTRY}" \
+      '.["insecure-registries"] = ((.["insecure-registries"] // []) + [$reg] | unique)' \
+      "${DAEMON_JSON}" > "${TMP_JSON}"
+  else
+    jq -n --arg reg "${REGISTRY}" '{"insecure-registries": [$reg]}' > "${TMP_JSON}"
+  fi
+  sudo mkdir -p /etc/docker
+  sudo cp "${TMP_JSON}" "${DAEMON_JSON}"
+  rm -f "${TMP_JSON}"
+  sudo systemctl restart docker
+  echo "Docker configuré et redémarré. Contenu de ${DAEMON_JSON} :"
+  cat "${DAEMON_JSON}"
+else
+  echo "Docker n'est pas installé sur cette VM — étape ignorée (pas nécessaire si Jenkins build/push ailleurs)."
+fi
+
+echo
+echo "k3s ET Docker sont configurés pour parler en HTTP à ${REGISTRY}."
+echo "Les manifestes de déploiement et les commandes 'docker push' pourront référencer des images en '${REGISTRY}/<image>:<tag>'."
