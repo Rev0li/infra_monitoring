@@ -9,7 +9,7 @@ a un fichier dans `docs/tickets/<ID>.md` (géré par le skill ticket-handoff).
 ## Jour 1 — Fondations infra
 | Ticket | Titre | Dépend de | Statut |
 |---|---|---|---|
-| TICKET-01 | Vérifier prérequis VM (OS, specs, sudo) et installer k3s single-node | — | coded |
+| TICKET-01 | Vérifier prérequis VM (OS, specs, sudo) et installer k3s single-node | — | validated |
 | TICKET-02 | Installer/valider le registre d'images Docker | TICKET-01 | todo |
 | TICKET-03 | Créer les 4 namespaces K8s (dev/int/uat/prod) avec quotas de base | TICKET-01 | todo |
 

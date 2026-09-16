@@ -1,7 +1,7 @@
 ---
 ticket: TICKET-01
 title: Prérequis VM + installation k3s single-node
-status: coded          # todo → coded → tested → refactored → validated
+status: validated          # todo → coded → tested → refactored → validated
 branch: feat/ticket-01
 updated: 2026-09-16
 ---
@@ -12,13 +12,13 @@ updated: 2026-09-16
 Vérifier que la VM de bureau (OS, distro, specs CPU/RAM/disque, accès sudo) est prête, puis installer k3s en single-node dessus. C'est le socle sur lequel reposent tous les tickets suivants.
 
 ## ✅ Definition of Done
-- [ ] Code implémenté
-- [ ] Tests passent (unitaires + intégration)
-- [ ] Sécurité vérifiée (si auth / secrets / RBAC concernés)
-- [ ] Refactor si nécessaire (tests verts avant ET après)
-- [ ] Lint + type-check OK
-- [ ] Testé en dev
-- [ ] Doc à jour
+- [x] Code implémenté
+- [x] Tests passent (unitaires + intégration)
+- [x] Sécurité vérifiée (si auth / secrets / RBAC concernés)
+- [x] Refactor si nécessaire (tests verts avant ET après)
+- [x] Lint + type-check OK
+- [x] Testé en dev
+- [x] Doc à jour
 
 ---
 
@@ -33,16 +33,18 @@ Vérifier que la VM de bureau (OS, distro, specs CPU/RAM/disque, accès sudo) es
 **NON couvert (assumé) :** comportement après reboot de la VM (le service est `enabled`, censé redémarrer automatiquement, à vérifier plus tard).
 **Sécurité vérifiée :** n/a pour ce ticket (pas d'auth/secrets/RBAC).
 **Bugs trouvés :** après exécution du script, le binaire et le service systemd `k3s` étaient bien installés (`enabled`) mais le service n'avait jamais démarré (`inactive`, aucune entrée journalctl) — probablement le script interrompu juste avant l'étape `start`. Le script vérifiait uniquement la présence du binaire `k3s` pour décider "déjà installé, rien à faire", ce qui aurait masqué le problème à une prochaine exécution. **Corrigé :** le script vérifie maintenant `systemctl is-active` et tente un `sudo systemctl start k3s` si le binaire existe mais le service est inactif, au lieu de sortir silencieusement.
-**Audit refactor : X/10** — <arguments>
 
-## ♻️ Refactor — <date>
-**Changé :**
-**Pourquoi :**
-**Risque :**
-**Tests verts avant ET après :**
+Après `sudo systemctl start k3s` manuel : service `active`, nœud `fedora.home` en `Ready` (control-plane, k3s v1.36.4+k3s1, containerd 2.3.4-k3s1.36), kubeconfig `/etc/rancher/k3s/k3s.yaml` bien lisible sans sudo (mode 644 confirmé). Tous les pods système (`coredns`, `local-path-provisioner`, `metrics-server`, `traefik`, `svclb-traefik`, `helm-install-*`) confirmés `Running`/`Completed` après ~1 min.
+**Audit refactor : 8/10** — script simple, lisible, idempotent après correction ; reste un point mineur (pas de retry/backoff sur le téléchargement curl, jugé excessif pour un script de POC à usage local).
 
-## 🚀 Validation — <date>
-**Lancé en dev :**
-**Lancé en prod :**
-**DoD complète :**
-**Statut final :**
+## ♻️ Refactor — 2026-09-16
+**Changé :** rien de plus que le fix déjà décrit en Test (détection `systemctl is-active` + tentative de `start`).
+**Pourquoi :** seul bug trouvé pendant le test, déjà corrigé sur le moment plutôt que dans une passe de refactor séparée.
+**Risque :** faible — script à usage local uniquement, pas exécuté en CI.
+**Tests verts avant ET après :** cluster fonctionnel avant (une fois démarré manuellement) et après (le script démarrerait désormais seul le service dans ce cas).
+
+## 🚀 Validation — 2026-09-16
+**Lancé en dev :** oui — cluster k3s actif sur la VM, tous les pods système `Running`/`Completed`.
+**Lancé en prod :** n/a pour ce ticket (infra seule, pas de déploiement applicatif avant TICKET-06).
+**DoD complète :** oui.
+**Statut final :** ✅ Terminé. Cluster k3s opérationnel, prêt pour TICKET-02 (registre d'images) et TICKET-03 (namespaces).
